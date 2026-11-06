@@ -5,63 +5,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Visores 3D · KA URBE IT</title>
 <style>
-  :root { --bg:#0c1016; --card:#141a24; --line:#232c3a; --txt:#e9f0f7; --mut:#8a94a3; --acc:#4d8dff; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { background:var(--bg); color:var(--txt); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; min-height:100vh; }
-  a { color:inherit; text-decoration:none; }
-  .wrap { max-width:980px; margin:0 auto; padding:48px 24px 64px; }
-  header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:40px; }
-  .brand { font-size:22px; font-weight:800; letter-spacing:.5px; }
-  .brand span { color:var(--acc); }
-  .brand small { display:block; font-size:12px; color:var(--mut); font-weight:500; letter-spacing:.3px; }
-  h1 { font-size:30px; font-weight:700; margin-bottom:6px; }
-  .sub { color:var(--mut); font-size:14px; margin-bottom:36px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:18px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; transition:border-color .15s, transform .15s; display:flex; flex-direction:column; gap:10px; }
-  .card:hover { border-color:var(--acc); transform:translateY(-2px); }
-  .card h2 { font-size:18px; font-weight:700; }
-  .card .loc { font-size:13px; color:var(--mut); }
-  .card .meta { font-size:12px; color:var(--mut); opacity:.8; }
-  .card .open { margin-top:auto; display:inline-block; align-self:flex-start; padding:9px 16px; border-radius:8px; background:var(--acc); color:#fff; font-size:13px; font-weight:600; }
-  .card .open:hover { filter:brightness(1.1); }
-  footer { margin-top:48px; color:var(--mut); font-size:12px; border-top:1px solid var(--line); padding-top:18px; }
-  footer a { color:var(--acc); }
+  :root{
+    --bg:#0a0a0a;
+    --bg2:#111111;
+    --card:#161616;
+    --card-hover:#1c1a1a;
+    --border:#2a2a2a;
+    --accent:#ff6b5a;   /* coral KA URBE IT */
+    --gold:#ff8a7a;
+    --text:#ffffff;
+    --muted:#8c8c8c;
+    --dim:#5a5a5a;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --display:'Urbanist','Montserrat',sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--sans);
+    min-height:100vh; -webkit-font-smoothing:antialiased;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:48px 48px;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1040px;margin:0 auto;padding:44px 28px 64px;}
+
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:22px;border-bottom:1px solid var(--border);margin-bottom:40px;}
+  .brand{display:flex;flex-direction:column;gap:3px;}
+  .brand b{font-family:var(--display);font-size:22px;font-weight:800;letter-spacing:.4px;}
+  .brand b span{color:var(--accent);}
+  .brand small{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+  .badge-live{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:7px 12px;border-radius:4px;}
+  .badge-live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);}
+
+  .hero{margin-bottom:34px;}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+  .kicker::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--accent),transparent);}
+  h1{font-family:var(--display);font-size:40px;font-weight:800;line-height:1.08;letter-spacing:-.5px;}
+  h1 em{font-style:normal;color:var(--accent);}
+  .sub{margin-top:14px;color:var(--muted);font-size:15px;line-height:1.6;max-width:620px;}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  @media (max-width:640px){.grid{grid-template-columns:1fr;}}
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:10px;
+    padding:22px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;
+    transition:border-color .18s ease, transform .18s ease, background .18s ease;
+  }
+  .card:hover{border-color:var(--accent);background:var(--card-hover);transform:translateY(-3px);}
+  .card::after{content:"";position:absolute;inset:0;background:radial-gradient(600px circle at 50% 0%,rgba(255,107,90,.09),transparent 60%);opacity:0;transition:opacity .2s;pointer-events:none;}
+  .card:hover::after{opacity:1;}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .idx{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:1px;}
+  .tag{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:4px 8px;border-radius:3px;}
+  .card h2{font-family:var(--display);font-size:19px;font-weight:700;line-height:1.2;letter-spacing:-.2px;}
+  .loc{font-size:13px;color:var(--muted);}
+  .specs{font-family:var(--mono);font-size:11.5px;color:var(--gold);letter-spacing:.5px;display:flex;flex-wrap:wrap;gap:6px 14px;}
+  .specs span::before{content:"▸";color:var(--accent);margin-right:6px;}
+  .open{
+    margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--text);background:var(--accent);padding:10px 16px;border-radius:5px;font-weight:600;
+    transition:filter .15s ease, box-shadow .15s ease;
+  }
+  .open:hover{filter:brightness(1.08);box-shadow:0 0 18px rgba(255,107,90,.35);}
+  .open::after{content:"→";}
+
+  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--dim);font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;}
+  footer a{color:var(--muted);}
+  footer a:hover{color:var(--accent);}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <a class="brand" href="https://www.kaurbe.cl" target="_blank" rel="noopener">KA URBE <span>IT</span><small>Infraestructura digital · Real estate · Energía</small></a>
+    <a class="brand" href="https://www.kaurbe.cl" target="_blank" rel="noopener">
+      <b>KA URBE <span>IT</span></b>
+      <small>AI Infrastructure · Data Centers · Land &amp; Power</small>
+    </a>
+    <span class="badge-live">Visores activos</span>
   </header>
-  <h1>Visores 3D de proyectos</h1>
-  <p class="sub">Terreno + ortofoto satelital + zonificación, autocontenidos (sin dependencias externas). Abre cada proyecto en una pestaña.</p>
+
+  <div class="hero">
+    <div class="kicker">Sites Portfolio · Visores 3D</div>
+    <h1>Territorio en <em>tres dimensiones</em>.</h1>
+    <p class="sub">Terreno, ortofoto satelital, red eléctrica y zonificación — visores autocontenidos, sin dependencias externas. Cada proyecto se abre en una pestaña.</p>
+  </div>
+
   <div class="grid">
     <a class="card" href="valparaiso.html" target="_blank" rel="noopener">
+      <div class="card-top"><span class="idx">01</span><span class="tag">Chile</span></div>
       <h2>The Pacific Gate · Valparaíso</h2>
-      <div class="loc">Placilla de Peñuelas · Región de Valparaíso, Chile</div>
-      <div class="meta">300 MW · S/E La Pólvora 220 kV · PREMVAL</div>
+      <div class="loc">Placilla de Peñuelas · Región de Valparaíso</div>
+      <div class="specs"><span>300 MW</span><span>S/E La Pólvora 220 kV</span><span>PREMVAL</span></div>
       <span class="open">Abrir visor</span>
     </a>
+
     <a class="card" href="monterrey.html" target="_blank" rel="noopener">
+      <div class="card-top"><span class="idx">02</span><span class="tag">México</span></div>
       <h2>Salinas Victoria · Monterrey</h2>
-      <div class="loc">Nuevo León, México</div>
-      <div class="meta">Data center · 400 kV · red eléctrica CENACE</div>
+      <div class="loc">Nuevo León</div>
+      <div class="specs"><span>400 kV</span><span>Red CENACE</span></div>
       <span class="open">Abrir visor</span>
     </a>
+
     <a class="card" href="chilcas.html" target="_blank" rel="noopener">
+      <div class="card-top"><span class="idx">03</span><span class="tag">Chile</span></div>
       <h2>Fundo Casa Blanca · Las Chilcas</h2>
-      <div class="loc">Región de Valparaíso, Chile</div>
-      <div class="meta">Predio · relieve 3D · ortofoto</div>
+      <div class="loc">Región de Valparaíso</div>
+      <div class="specs"><span>Relieve 3D</span><span>Ortofoto</span></div>
       <span class="open">Abrir visor</span>
     </a>
+
     <a class="card" href="algarrobo.html" target="_blank" rel="noopener">
+      <div class="card-top"><span class="idx">04</span><span class="tag">Chile</span></div>
       <h2>Haras Aguas de Algarrobo</h2>
-      <div class="loc">Algarrobo · Región de Valparaíso, Chile</div>
-      <div class="meta">Predio · relieve 3D · ortofoto</div>
+      <div class="loc">Algarrobo · Región de Valparaíso</div>
+      <div class="specs"><span>Relieve 3D</span><span>Ortofoto</span></div>
       <span class="open">Abrir visor</span>
     </a>
   </div>
-  <footer>KA URBE IT · <a href="https://www.kaurbe.cl" target="_blank" rel="noopener">kaurbe.cl</a></footer>
+
+  <footer>
+    <span>KA URBE IT · Confidencial</span>
+    <a href="https://www.kaurbe.cl" target="_blank" rel="noopener">kaurbe.cl</a>
+  </footer>
 </div>
 </body>
 </html>
