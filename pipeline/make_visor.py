@@ -295,9 +295,9 @@ const connG=new THREE.Group(); scene.add(connG);
 POIS.forEach(p=>{{const x=X(p.e), z=Z(p.nn); const m=new THREE.Mesh(new THREE.SphereGeometry(5*SC,16,12),new THREE.MeshBasicMaterial({{color:0x27d3ff}})); m.position.set(x,hY(x,z)+1.5*EX,z); poisG.add(m);
  const s=label([p.n],'#27d3ff',false); s.userData.p=[x,z]; s.userData.k=30; labG.add(s);}});
 function build(){{setTerrainY(); while(siteG.children.length){{const c=siteG.children.pop(); c.geometry&&c.geometry.dispose();}}
- siteG.add(tube(drape(SITE,4),2.0*SC,0xff1e10));
+ if(SITE.length>=3) siteG.add(tube(drape(SITE,4),2.0*SC,0xff1e10));
  while(netG.children.length){{const c=netG.children.pop(); c.geometry&&c.geometry.dispose();}}
- LINES.forEach(l=>netG.add(tube(drapeLine(l.pts,20),Math.max(2,W/400),l.color)));
+ LINES.forEach(l=>netG.add(tube(drapeLine(l.pts,20),Math.max(6,W/250),l.color)));
  POLYGONS.forEach(p=>overlay(g=>{{path(g,p.ring); g.fillStyle='rgba(240,160,32,.22)'; g.fill(); g.strokeStyle=p.color; g.lineWidth=3; g.stroke();}}, netG));
  labG.children.concat(poisG.children).forEach(s=>{{const [x,z]=s.userData.p; s.position.set(x,hY(x,z)+(s.userData.big?26:s.userData.k?30:0)*Math.max(1,EX*.7),z);}});
  rebuildConn(); document.getElementById('exv').textContent='×'+EX.toFixed(1);}}
