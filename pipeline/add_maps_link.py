@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Post-proceso: agrega a un visor 3D autocontenido un botón 'Ver site en Google Earth'
-que descarga un KML (embebido como data URI) con el polígono del site.
+"""Post-proceso: agrega a un visor 3D autocontenido un botón 'Ver en Google Maps'
+que abre el punto (centroide del polígono del site) en Google Maps.
 Extrae el polígono (const SITE=... o GEO={...}) y el EPSG del propio HTML,
-convierte UTM->lonlat y genera el KML.
-Uso: add_earth_button.py <html> [kml_name]
+convierte UTM->lonlat y genera el link a Google Maps.
+Reemplaza cualquier botón 'earthbtn' previo.
+Uso: add_maps_link.py <html>
 """
-import sys, os, json, re, base64, subprocess
+import sys, os, json, re, subprocess
 
 def sh(cmd):
     return subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout.strip()
@@ -38,24 +39,8 @@ def extract_polygon(html):
             print('  GEO parse err:', e)
     return None, None
 
-def gen_kml(name, lonlats, is_point):
-    if is_point:
-        lon, lat = lonlats[0]
-        geom = f"<Point><coordinates>{lon},{lat},0</coordinates></Point>"
-    else:
-        coords = " ".join(f"{lon},{lat},0" for lon, lat in lonlats)
-        geom = (f"<Polygon><outerBoundaryIs><LinearRing><coordinates>{coords}"
-                f"</coordinates></LinearRing></outerBoundaryIs></Polygon>")
-    return (f'<?xml version="1.0" encoding="UTF-8"?>\n'
-            f'<kml xmlns="http://www.opengis.net/kml/2.2">\n<Document>\n'
-            f'<name>{name}</name>\n<Placemark>\n<name>{name}</name>\n'
-            f'<Style><LineStyle><color>ff4e5aff</color><width>2</width></LineStyle>'
-            f'<PolyStyle><color>3d4e5aff</color></PolyStyle></Style>\n'
-            f'{geom}\n</Placemark>\n</Document>\n</kml>')
-
 def main():
     html_path = sys.argv[1]
-    kml_name = sys.argv[2] if len(sys.argv) > 2 else os.path.basename(html_path).replace('.html', '.kml')
     html = open(html_path, encoding='utf-8').read()
     m = re.search(r'EPSG:(\d+)', html)
     epsg = int(m.group(1)) if m else 32719
@@ -64,23 +49,22 @@ def main():
         print(f'NO_POLIGONO {html_path}')
         return
     lonlats = utm_to_lonlat(ring, epsg)
-    title = (re.search(r'<title>([^<]+)</title>', html) or [None, kml_name])[1]
-    is_point = len(ring) == 1
-    kml = gen_kml(title, lonlats, is_point)
-    b64 = base64.b64encode(kml.encode()).decode()
-    btn = (f'<a id="earthbtn" download="{kml_name}" '
-           f'href="data:application/vnd.google-earth.kml+xml;base64,{b64}" '
+    clon = sum(p[0] for p in lonlats) / len(lonlats)
+    clat = sum(p[1] for p in lonlats) / len(lonlats)
+    maps_url = f'https://www.google.com/maps?q={clat:.6f},{clon:.6f}'
+    btn = (f'<a id="earthbtn" href="{maps_url}" target="_blank" rel="noopener" '
            f'style="position:fixed;bottom:16px;right:16px;z-index:9;background:#0f6b3c;color:#fff;'
            f'border:1px solid #1f8f56;border-radius:8px;padding:8px 14px;text-decoration:none;'
            f'font:600 13px -apple-system,Segoe UI,Roboto,sans-serif;letter-spacing:.2px;'
-           f'box-shadow:0 2px 8px rgba(0,0,0,.4)">Ver site en Google Earth</a>')
-    # inyectar antes de </body> (o al final si no hay)
+           f'box-shadow:0 2px 8px rgba(0,0,0,.4)">Ver en Google Maps</a>')
+    # quitar botón previo (si existe)
+    html = re.sub(r'<a id="earthbtn".*?</a>', '', html, flags=re.DOTALL)
     if '</body>' in html:
         html = html.replace('</body>', btn + '</body>', 1)
     else:
         html += btn
     open(html_path, 'w', encoding='utf-8').write(html)
-    print(f'OK {os.path.basename(html_path)} | EPSG {epsg} | {src} {len(ring)} vtx | kml {len(kml)} B')
+    print(f'OK {os.path.basename(html_path)} | {clat:.5f},{clon:.5f} | {src} {len(ring)} vtx')
 
 if __name__ == '__main__':
     main()
