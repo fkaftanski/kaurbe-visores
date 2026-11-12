@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#0f0f0f"/>
-  <rect x="14" y="14" width="5" height="36" rx="2.5" fill="#ffffff"/>
-  <text x="34" y="43" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">KA</text>
+  <rect width="64" height="64" rx="14" fill="#ffffff"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#111111" stroke-width="3"/>
+  <text x="32" y="43" font-family="JetBrains Mono, monospace" font-size="26" font-weight="700" fill="#111111" text-anchor="middle">KA</text>
 </svg>
