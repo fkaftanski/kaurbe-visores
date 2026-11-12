@@ -28,7 +28,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellips
 .ln{display:inline-block;width:16px;height:3px;border-radius:2px;margin-right:7px;vertical-align:3px}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid #ffcf6e;outline-offset:2px}
 #tip{position:fixed;pointer-events:none;background:rgba(10,14,20,.94);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5;transform:translate(14px,14px);white-space:nowrap;font-variant-numeric:tabular-nums}
-#hint{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--mut);transition:opacity .6s;pointer-events:none}
+#hint{position:fixed;left:50%;bottom:calc(56px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--mut);transition:opacity .6s;pointer-events:none}
+#scalebar{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:4;pointer-events:none;text-align:center}
+#sbar{height:4px;background:#e9edf2;border:1px solid #0e131a;border-radius:2px;margin:0 auto}
+#stxt{font-size:11px;color:#e9edf2;text-shadow:0 1px 2px #000;font-variant-numeric:tabular-nums}
 #load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--mut);font-size:13px;background:var(--bg);transition:opacity .5s;z-index:20}
 #load i{width:16px;height:16px;border:2px solid #2b3440;border-top-color:#4d8dff;border-radius:50%;animation:sp .9s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -52,6 +55,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <!--/SPECS-->
 <div id="tip" hidden></div>
 <div id="hint">Arrastra para rotar · rueda o pellizco para zoom · clic derecho para desplazar</div>
+<div id="scalebar"><div id="sbar" style="width:100px"></div><span id="stxt"></span></div>
 <svg id="north" viewBox="-22 -22 44 44"><g id="nrot"><circle r="20" fill="rgba(14,19,26,.8)" stroke="#2b3440"/>
 <path d="M0,-15 L6,4 L0,0 L-6,4Z" fill="#4d8dff"/><path d="M0,15 L6,4 L0,0 L-6,4Z" fill="#6b7787"/>
 <text x="0" font-size="7" fill="#fff" text-anchor="middle" font-weight="700" transform="translate(0,-15)">N</text></g></svg>
@@ -90,7 +94,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <tr><td><span class="sw" style="background:#8a93a0"></span>AP · ZP · ZEU 1·13·B-44 · Otras zonas</td><td class="n">—</td></tr>
 <tr><td><span class="ln" style="background:#a8602c"></span>Levantamiento topo dic-2024 (curvas 0,5 m)</td><td class="n">Lote D3A6</td></tr>
 </table>
-<div class="mut" style="margin-top:6px">Relieve Copernicus GLO-30 (30 m) · cota 0–518 m en el recuadro (predio–costa)</div></div>
+<div class="mut" style="margin-top:6px">Relieve Copernicus GLO-30 (30 m) · cota 0–518 m en el recuadro (predio–costa)</div>
+<div class="mut" style="margin-top:4px">AR1 potencialmente inundable y AUP ensanche Camino La Pólvora (CIP 01148): pendientes de geometría</div></div>
 <script>/**
  * @license
  * Copyright 2010-2021 Three.js Authors
@@ -1369,6 +1374,18 @@ function updTip() {
 const hint = document.getElementById('hint');
 controls.addEventListener('start', () => { hint.style.opacity = 0; setTimeout(() => hint.remove(), 700); }, {once: true});
 const nrot = document.getElementById('nrot');
+const sbar = document.getElementById('sbar'), stxt = document.getElementById('stxt');
+function updScale() {
+  const rv = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0);
+  const t = controls.target;
+  const a = t.clone().project(camera), b = t.clone().add(rv).project(camera);
+  const pxPerM = Math.abs(b.x - a.x) / 2 * innerWidth;
+  if (!(pxPerM > 0)) return;
+  const raw = 120 / pxPerM, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const nice = [1, 2, 5, 10].map(k => k * mag).find(v => v >= raw) || 10 * mag;
+  sbar.style.width = Math.round(nice * pxPerM) + 'px';
+  stxt.textContent = nice >= 1000 ? (nice / 1000).toLocaleString('es-CL') + ' km' : nice + ' m';
+}
 const conn = document.getElementById('conn').getContext('2d');
 function drawConnectors() {
   const w = innerWidth, h = innerHeight;
@@ -1407,7 +1424,7 @@ function positionLabels() {
 function loop(t) {
   requestAnimationFrame(loop);
   if (anim) { let k = Math.min(1, (t-anim.s)/1100); k = k < .5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2; camera.position.lerpVectors(anim.p0, anim.p1, k); controls.target.lerpVectors(anim.t0, anim.t1, k); if (k >= 1) anim = null; }
-  controls.update(); positionLabels(); scaleLabels(); updTip();
+  controls.update(); positionLabels(); scaleLabels(); updTip(); updScale();
   const dx = controls.target.x - camera.position.x, dz = controls.target.z - camera.position.z;
   nrot.setAttribute('transform', 'rotate(' + (-Math.atan2(dx, -dz)*180/Math.PI) + ')');
   renderer.render(scene, camera);
