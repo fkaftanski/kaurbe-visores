@@ -62,10 +62,10 @@
   footer a{color:var(--muted);}
   footer a:hover{color:var(--text);}
 
-  /* Logo animado KA URBE IT — esquina inferior derecha */
+  /* Logo animado KA URBE IT — esquina superior derecha */
   .logo-kaurbe{
-    position:fixed;right:22px;bottom:22px;width:132px;z-index:90;
-    opacity:.9;transform-origin:center bottom;
+    position:fixed;right:22px;top:22px;width:132px;z-index:90;
+    opacity:.9;transform-origin:center top;
     transition:opacity .2s ease,transform .35s cubic-bezier(.34,1.56,.64,1);
     animation:kaurbe-bob 4.2s ease-in-out infinite;
   }
@@ -82,7 +82,7 @@
     25%{transform:translateY(-12px) scale(1.08) rotate(-6deg);}
     75%{transform:translateY(-12px) scale(1.08) rotate(6deg);}
   }
-  @media (max-width:760px){.logo-kaurbe{width:92px;right:14px;bottom:14px;}}
+  @media (max-width:760px){.logo-kaurbe{width:92px;right:14px;top:14px;}}
   @media (prefers-reduced-motion:reduce){.logo-kaurbe{animation:none;}}
 </style>
 </head>
