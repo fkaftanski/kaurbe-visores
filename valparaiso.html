@@ -42,7 +42,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <canvas id="conn" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:4"></canvas>
 <div id="load"><i></i>Cargando ortofoto y relieve…</div>
 <!--SPECS-->
-<div id="specs" style="position:fixed;bottom:14px;left:14px;z-index:5;background:rgba(14,19,26,.85);backdrop-filter:blur(8px);border:1px solid #2b3440;border-radius:12px;padding:10px 14px;font-size:12px;max-width:340px;color:#dfe6ee">
+<div id="specs" style="position:fixed;bottom:64px;right:16px;z-index:5;background:rgba(14,19,26,.85);backdrop-filter:blur(8px);border:1px solid #2b3440;border-radius:12px;padding:10px 14px;font-size:12px;max-width:340px;color:#dfe6ee">
 <div style="font-weight:700;color:#ff5a4e;font-size:10px;letter-spacing:.6px;margin-bottom:4px">ESPECIFICACIONES</div>
 <ul style="margin:0;padding-left:16px;line-height:1.55"><li>300 MW (SAC)</li>
 <li>Power Land → RTB</li>
@@ -56,7 +56,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
 <path d="M0,-15 L6,4 L0,0 L-6,4Z" fill="#4d8dff"/><path d="M0,15 L6,4 L0,0 L-6,4Z" fill="#6b7787"/>
 <text x="0" font-size="7" fill="#fff" text-anchor="middle" font-weight="700" transform="translate(0,-15)">N</text></g></svg>
 <div id="hud" class="pn">
- <a href="https://www.kaurbe.cl" target="_blank" rel="noopener" style="display:block;width:fit-content;margin-bottom:8px"><img id="logo" alt="KA URBE IT" style="height:113px;display:block"></a>
+ <a href="https://www.kaurbe.com" target="_blank" rel="noopener" style="display:block;width:fit-content;margin-bottom:8px"><img id="logo" alt="KA URBE IT" style="height:113px;display:block"></a>
  <div style="margin-bottom:5px"><span class="tag conf">CONFIDENCIAL</span></div>
  <h1>The Pacific Gate <b>· Valparaíso</b></h1>
  <div class="mut">Camino La Pólvora · Placilla de Peñuelas · Rol 9323-27</div>
@@ -77,16 +77,17 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid
  <div class="btns"><button id="b3d">Vista 3D</button><button id="btop">Cenital</button></div>
 </details>
 <div id="legend" class="pn"><h2>Referencias</h2><table>
-<tr><td><span class="ln" style="background:#4d8dff"></span>Polígono DATA CENTER (KMZ)</td><td class="n">16,6 ha</td></tr>
+<tr><td><span class="ln" style="background:#FF6B5A"></span>Polígono DATA CENTER (KMZ)</td><td class="n">16,6 ha</td></tr>
 <tr><td><span class="sw" style="background:#ffd84d"></span>S/E La Pólvora · 220 kV</td><td class="n">—</td></tr>
 <tr><td><span class="ln" style="background:#ff3b30"></span>Acometida 220 kV (futura)</td><td class="n">—</td></tr>
-<tr><td><span class="ln" style="background:#2f8cff"></span>Landing cables submarinos</td><td class="n">—</td></tr>
+<tr><td><span class="sw" style="background:#2f8cff"></span>Landing cables submarinos</td><td class="n">—</td></tr>
 <tr><td><span class="sw" style="background:#2f8cff"></span>Playa Las Torpederas</td><td class="n">costa</td></tr>
 <tr><td colspan="2" style="padding-top:6px;color:var(--mut);font-weight:600;font-size:11px">Zonificación PREMVAL</td></tr>
 <tr><td><span class="sw" style="background:#4d8dff"></span>ZEU PT · Productiva portuaria (predio)</td><td class="n">—</td></tr>
 <tr><td><span class="sw" style="background:#b8a37a"></span>AU / AV · Urbana consolidada</td><td class="n">—</td></tr>
 <tr><td><span class="sw" style="background:#e0a83c"></span>ZEU 9 · 10 · 14 · Extensión urbana</td><td class="n">—</td></tr>
 <tr><td><span class="sw" style="background:#6fbf73"></span>ZI S1 · Infraestructura sanitaria</td><td class="n">—</td></tr>
+<tr><td><span class="sw" style="background:#8a93a0"></span>AP · ZP · ZEU 1·13·B-44 · Otras zonas</td><td class="n">—</td></tr>
 <tr><td><span class="ln" style="background:#a8602c"></span>Levantamiento topo dic-2024 (curvas 0,5 m)</td><td class="n">Lote D3A6</td></tr>
 </table>
 <div class="mut" style="margin-top:6px">Relieve Copernicus GLO-30 (30 m) · cota 0–518 m en el recuadro (predio–costa)</div></div>
@@ -1213,7 +1214,7 @@ function overlay(ring, color, alpha) {
   const m = new THREE.Mesh(tg, new THREE.MeshBasicMaterial({map: t, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1}));
   m.renderOrder = 1; scene.add(m); return m;
 }
-const centralOv = overlay(GEO.central, '#4d8dff', .20);
+const centralOv = overlay(GEO.central, '#FF6B5A', .20);
 // zonificación PREMVAL (overlay multicapa)
 function zoningOverlay() {
   const cv = document.createElement('canvas'); cv.width = TW; cv.height = TH; const g = cv.getContext('2d');
@@ -1222,8 +1223,8 @@ function zoningOverlay() {
     g.beginPath();
     z.ring.forEach((p, i) => i ? g.lineTo(X(p[0]), Z(p[1])) : g.moveTo(X(p[0]), Z(p[1])));
     g.closePath();
-    g.fillStyle = z.color; g.globalAlpha = 0.16; g.fill();
-    g.globalAlpha = 0.5; g.lineWidth = 3; g.strokeStyle = z.color; g.stroke();
+    g.fillStyle = z.color; g.globalAlpha = 0.20; g.fill();
+    g.globalAlpha = 0.65; g.lineWidth = 3; g.strokeStyle = z.color; g.stroke();
   });
   g.globalAlpha = 1;
   const t = new THREE.CanvasTexture(cv); t.anisotropy = ANI;
@@ -1287,7 +1288,7 @@ function lugarLabel(name) {
 function centroid(ring) { let cx = 0, cy = 0; ring.forEach(p => { cx += p[0]; cy += p[1]; }); return [cx/ring.length, cy/ring.length]; }
 const cen = centroid(GEO.central);
 // título
-const sBig = label(['The Pacific Gate', 'Valparaíso · 300 MW · ' + CENTRAL_HA + ' ha'], '#4d8dff', true); sBig.userData.p = [X(cen[0]), Z(cen[1] - 620)]; labG.add(sBig);
+const sBig = label(['The Pacific Gate', 'Valparaíso · 300 MW · ' + CENTRAL_HA.toFixed(1).replace('.',',') + ' ha'], '#FF6B5A', true); sBig.userData.p = [X(cen[0]), Z(cen[1] - 620)]; labG.add(sBig);
 // S/E La Pólvora (punto, con conector)
 const seLbl = label(['S/E La Pólvora', '220 kV'], '#ffd84d', false);
 seLbl.userData.p = [X(PTS.se_polvora[0]), Z(PTS.se_polvora[1])]; seLbl.userData.tgt = PTS.se_polvora; seLbl.userData.off = 22; labG.add(seLbl);
@@ -1300,12 +1301,12 @@ seLbl.userData.p = [X(PTS.se_polvora[0]), Z(PTS.se_polvora[1])]; seLbl.userData.
 // landing de cables submarinos (rótulo desplazado al norte para no pisar Las Torpederas)
 (function () {
   const s = label(['Landing cables submarinos'], '#2f8cff', false);
-  s.userData.p = [X(PTS.landing[0]), Z(PTS.landing[1] + 260)]; s.userData.tgt = PTS.landing; s.userData.off = 18; labG.add(s);
+  s.userData.p = [X(PTS.landing[0] + 520), Z(PTS.landing[1] + 720)]; s.userData.tgt = PTS.landing; s.userData.off = 18; labG.add(s);
 })();
 // Playa Las Torpederas (costa)
 (function () {
   const s = label(['Playa Las Torpederas'], '#2f8cff', false);
-  s.userData.p = [X(TORPEDERAS[0]), Z(TORPEDERAS[1])]; s.userData.tgt = TORPEDERAS; s.userData.off = 14; labG.add(s);
+  s.userData.p = [X(TORPEDERAS[0] + 620), Z(TORPEDERAS[1] + 120)]; s.userData.tgt = TORPEDERAS; s.userData.off = 14; labG.add(s);
 })();
 // nombres geográficos (lugares)
 LUGARES.forEach(([nm, E, N]) => {
@@ -1315,18 +1316,19 @@ LUGARES.forEach(([nm, E, N]) => {
 // etiquetas de zonificación PREMVAL
 LAY.premval.forEach(z => {
   const big = z.zona === 'ZEU PT';
-  const s = label(big ? ['ZEU PT', 'Productiva portuaria'] : [z.zona], z.color, big);
+  const zn = z.zona.indexOf('ZEU B-44') >= 0 ? 'ZEU B-44' : z.zona;
+  const s = label(big ? ['ZEU PT', 'Productiva portuaria'] : [zn], z.color, big);
   s.userData.p = [X(z.centroid[0]), Z(z.centroid[1])]; s.userData.off = 24; s.userData.zon = true; labG.add(s);
 });
 function clear(g) { while (g.children.length) { const c = g.children.pop(); c.geometry.dispose(); } }
 function build() {
   setTerrainY(); [centralG, elecG, ptsG].forEach(clear);
-  centralG.add(tube(drape(GEO.central, 4), 5, 0x4d8dff));
-  if (LNS.lt_futura) elecG.add(tube(drape(LNS.lt_futura, 4), 4, 0xff3b30));
-  (function () { const m = new THREE.Mesh(new THREE.SphereGeometry(26, 18, 12), new THREE.MeshBasicMaterial({color: 0xffd84d})); m.position.set(X(PTS.se_polvora[0]), hY(X(PTS.se_polvora[0]), Z(PTS.se_polvora[1])) + 20, Z(PTS.se_polvora[1])); ptsG.add(m); })();
-  (function () { const m = new THREE.Mesh(new THREE.SphereGeometry(6, 12, 8), new THREE.MeshBasicMaterial({color: 0x4d8dff})); m.position.set(X(PTS.dc300[0]), hY(X(PTS.dc300[0]), Z(PTS.dc300[1])) + 6, Z(PTS.dc300[1])); ptsG.add(m); })();
-  (function () { const m = new THREE.Mesh(new THREE.SphereGeometry(14, 12, 8), new THREE.MeshBasicMaterial({color: 0x2f8cff})); m.position.set(X(PTS.landing[0]), hY(X(PTS.landing[0]), Z(PTS.landing[1])) + 14, Z(PTS.landing[1])); ptsG.add(m); })();
-  (function () { const m = new THREE.Mesh(new THREE.SphereGeometry(14, 12, 8), new THREE.MeshBasicMaterial({color: 0x2f8cff})); m.position.set(X(TORPEDERAS[0]), hY(X(TORPEDERAS[0]), Z(TORPEDERAS[1])) + 14, Z(TORPEDERAS[1])); ptsG.add(m); })();
+  centralG.add(tube(drape(GEO.central, 4), 8, 0xff6b5a));
+  if (LNS.lt_futura) elecG.add(tube(drape(LNS.lt_futura, 4), 6, 0xff3b30));
+  (function () { const m = new THREE.Mesh(new THREE.SphereGeometry(30, 18, 12), new THREE.MeshBasicMaterial({color: 0xffd84d})); m.position.set(X(PTS.se_polvora[0]), hY(X(PTS.se_polvora[0]), Z(PTS.se_polvora[1])) + 22, Z(PTS.se_polvora[1])); ptsG.add(m); })();
+  (function () { const m = new THREE.Mesh(new THREE.SphereGeometry(12, 12, 8), new THREE.MeshBasicMaterial({color: 0xff6b5a})); m.position.set(X(PTS.dc300[0]), hY(X(PTS.dc300[0]), Z(PTS.dc300[1])) + 10, Z(PTS.dc300[1])); ptsG.add(m); })();
+  (function () { const m = new THREE.Mesh(new THREE.SphereGeometry(18, 12, 8), new THREE.MeshBasicMaterial({color: 0x2f8cff})); m.position.set(X(PTS.landing[0]), hY(X(PTS.landing[0]), Z(PTS.landing[1])) + 16, Z(PTS.landing[1])); ptsG.add(m); })();
+  (function () { const m = new THREE.Mesh(new THREE.SphereGeometry(18, 12, 8), new THREE.MeshBasicMaterial({color: 0x2f8cff})); m.position.set(X(TORPEDERAS[0]), hY(X(TORPEDERAS[0]), Z(TORPEDERAS[1])) + 16, Z(TORPEDERAS[1])); ptsG.add(m); })();
   labG.children.forEach(s => { const [x, z] = s.userData.p; s.position.set(x, hY(x,z) + (s.userData.off || 30) * Math.max(1, EX*.6), z); });
   document.getElementById('exv').textContent = REL ? '×' + EX.toFixed(1) : '(relieve apagado)';
 }
