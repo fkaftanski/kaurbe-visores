@@ -164,11 +164,11 @@ DATA.conex.forEach(c=>{
 const dcMarkers=[];
 function addDC(m,d,cat,layer){m.bindPopup(popDC(d),{maxWidth:440,minWidth:330}).addTo(layer);dcMarkers.push({m:m,d:d,cat:cat,layer:layer});}
 DATA.exist.forEach(d=>{ const m=L.circleMarker([d.lat,d.lon],{radius:5,color:'#35c26f',weight:1.4,fillColor:'#35c26f',fillOpacity:.7})
-  .bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.rep?'<br>'+esc(d.rep_rol||'Representante')+': '+esc(d.rep):'')); addDC(m,d,'Censo',lExist); });
-DATA.grupos.aprobadas.forEach(d=>{ const m=mk(d,'#FF6B5A').bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.mw?'<br>'+esc(d.mw)+' MW':'')); addDC(m,d,'aprobada',lApr); });
-DATA.grupos.tramite.forEach(d=>{ const m=mk(d,'#f0a020').bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.mw?'<br>'+esc(d.mw)+' MW':'')); addDC(m,d,'En trámite',lTra); });
-DATA.grupos.sin_nup.forEach(d=>{ const m=mk(d,'#9a7bd8').bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.mw?'<br>'+esc(d.mw)+' MW':'')); addDC(m,d,'sin solicitud',lSin); });
-DATA.grupos.rechazadas.forEach(d=>{ const m=mk(d,'#5b6675').bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.mw?'<br>'+esc(d.mw)+' MW':'')); addDC(m,d,'Rechazada / desistida',lRec); });
+  .bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.rep?'<br>'+esc(d.rep_rol||'Representante')+': '+esc(d.rep):'')); addDC(m,d,'En operación · dato sin verificar',lExist); });
+DATA.grupos.aprobadas.forEach(d=>{ const m=mk(d,'#FF6B5A').bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.mw?'<br>'+esc(d.mw)+' MW':'')); addDC(m,d,'Conexión aprobada',lApr); });
+DATA.grupos.tramite.forEach(d=>{ const m=mk(d,'#f0a020').bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.mw?'<br>'+esc(d.mw)+' MW':'')); addDC(m,d,'Solicitud en trámite',lTra); });
+DATA.grupos.sin_nup.forEach(d=>{ const m=mk(d,'#9a7bd8').bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.mw?'<br>'+esc(d.mw)+' MW':'')); addDC(m,d,'Sin solicitud eléctrica',lSin); });
+DATA.grupos.rechazadas.forEach(d=>{ const m=mk(d,'#5b6675').bindTooltip(esc(d.nom)+(d.tit?'<br>Titular: '+esc(d.tit):'')+(d.mw?'<br>'+esc(d.mw)+' MW':'')); addDC(m,d,'Rechazada o desistida',lRec); });
 function popSE(d){
   return '<b>'+esc(d.nom)+'</b><br>Fuente del punto: archivo de trabajo del sitio · subestaciones · '+esc(d.source)+
     '<br>Denominaciones en el registro: '+d.variants.map(esc).join(' / ')+
